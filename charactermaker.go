@@ -10,7 +10,7 @@ func main(){
 	var myCharacter characterSheet;
 	var sorted bool;
 	var stats []int;
-	fmt.Scan(&method);
+	fmt.Scanf("%d\n", &method);
 	switch method {
 	case 1 :
 		stats, sorted = rollMethod1();
@@ -23,7 +23,8 @@ func main(){
 		stats, sorted = rollMethod3();
 		break
 	case 4 :
-		method4();
+		stats, sorted = rollMethod4();
+		break
 	}
 	//check for and run statpicker 
 	 if sorted == false{
@@ -40,11 +41,11 @@ func main(){
 
 	// later stuff to write
 	fmt.Println("Choose your Class by typing it");
-	fmt.Scan(&myCharacter.Class);
+	fmt.Scanf("%s\n", &myCharacter.Class);
 	fmt.Println("Choose your Race by typing it");
-	fmt.Scan(&myCharacter.Race);
+	fmt.Scanf("%s\n", &myCharacter.Race);
 
-	fmt.Printf("Here's your character %v\n", myCharacter);
+	fmt.Printf("Here's your character %#v\n", myCharacter);
 
 }
 
@@ -86,9 +87,7 @@ func statpicker( stats []int) []int{
 	return sorted[:];
 }
 
-
 func rollMethod1()([]int, bool){
-	fmt.Println("Method 1");
 	var rolls [6]int;
 	for i:=0; i<6; i++ {
 		var roll [4]int;
@@ -103,7 +102,6 @@ func rollMethod1()([]int, bool){
 }
 
 func rollMethod2()([]int, bool){
-	fmt.Println("Method 2");
 	var rolls [12]int;
 	for i := 0; i <12; i++{
 		rolls[i] = ((rand.Intn(5)+1)+(rand.Intn(5)+1)+(rand.Intn(5)+1));
@@ -114,7 +112,6 @@ func rollMethod2()([]int, bool){
 
 
 func rollMethod3()([]int, bool){
-	fmt.Println("Method 3");
 	var rolls [6]int;
 	for i := 0; i < 6; i++{
 		var roller [6]int;
@@ -127,10 +124,26 @@ func rollMethod3()([]int, bool){
 	return rolls[:], true;
 }
 
-func method4(){
+func rollMethod4()( []int, bool){
 	fmt.Println("Method 4");
+	var rmx [12][6]int;
+	for i:=0;i<12;i++{
+		for j:=0;j<6;j++{
+			rmx[i][j] = ((rand.Intn(5)+1)+(rand.Intn(5)+1)+(rand.Intn(5)+1));
+		}
+	}
+	fmt.Println("Choose one of the characters bellow by entering it's number.");
+	for i:=0;i<12;i++{
+		//the next line's arguments are spread over two lines
+		fmt.Printf("character %2d  Str %2d  Dex %2d  Con %2d  Int %2d  Wis %2d  Char %2d\n", 
+		i, rmx[i][0], rmx[i][1], rmx[i][2], rmx[i][3], rmx[i][4], rmx[i][5]);
+	}
+	var selection int;
+	fmt.Scanf("%d\n", &selection);
+	return rmx[selection][:], true;
 }
 
+//used by the rolling methods
 func sort(arr []int) {
 	var i int = 1
 	for i < len(arr){
