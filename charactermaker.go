@@ -17,7 +17,8 @@ func main(){
 		break
 
 	case 2 :
-		method2();
+		stats, sorted = rollMethod2();
+		break
 	case 3 :
 		method3();
 	case 4 :
@@ -29,11 +30,11 @@ func main(){
 	 }
 
 	 //writting stats to the myCharacter struc
-	 myCharacter.Str = stats[0];
-	 myCharacter.Dex = stats[1];
-	 myCharacter.Con = stats[2];
-	 myCharacter.Int = stats[3];
-	 myCharacter.Wis = stats[4];
+	 myCharacter.Str  = stats[0];
+	 myCharacter.Dex  = stats[1];
+	 myCharacter.Con  = stats[2];
+	 myCharacter.Int  = stats[3];
+	 myCharacter.Wis  = stats[4];
 	 myCharacter.Char = stats[5];
 
 	// later stuff to write
@@ -100,9 +101,16 @@ func rollMethod1()([]int, bool){
 	return rolls[:], false;
 }
 
-func method2(){
+func rollMethod2()([]int, bool){
 	fmt.Println("Method 2");
+	var rolls [12]int;
+	for i := 0; i <12; i++{
+		rolls[i] = ((rand.Intn(5)+1)+(rand.Intn(5)+1)+(rand.Intn(5)+1));
+	}
+	sort(rolls[:]);
+	return rolls[5:11], false;
 }
+
 
 func method3(){
 	fmt.Println("Method 3");
@@ -123,5 +131,3 @@ func sort(arr []int) {
 		i = i+1;
 	}
 }
-
-
