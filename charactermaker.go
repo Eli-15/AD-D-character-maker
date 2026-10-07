@@ -20,7 +20,8 @@ func main(){
 		stats, sorted = rollMethod2();
 		break
 	case 3 :
-		method3();
+		stats, sorted = rollMethod3();
+		break
 	case 4 :
 		method4();
 	}
@@ -62,7 +63,7 @@ type characterSheet struct{
 
 }
 
-//taks unsorted stats and has the player pick the order
+//takes unsorted stats and has the player pick the order
 func statpicker( stats []int) []int{
 	var sorted [6]int
 	used := [6]bool{false,false,false,false,false,false}
@@ -112,8 +113,18 @@ func rollMethod2()([]int, bool){
 }
 
 
-func method3(){
+func rollMethod3()([]int, bool){
 	fmt.Println("Method 3");
+	var rolls [6]int;
+	for i := 0; i < 6; i++{
+		var roller [6]int;
+		for j := 0; j < 6; j++{
+			roller[j] = ((rand.Intn(5)+1)+(rand.Intn(5)+1)+(rand.Intn(5)+1));
+		}
+		sort(roller[:]);
+		rolls[i] = roller[5];
+	}
+	return rolls[:], true;
 }
 
 func method4(){
