@@ -10,7 +10,15 @@ func main(){
 	var myCharacter characterSheet;
 	var sorted bool;
 	var stats []int;
-	fmt.Scanf("%d\n", &method);
+	for loop := true; loop == true;{
+		_, err := fmt.Scanf("%d\n", &method);
+		if(err != nil || method <1 || method >4){
+			fmt.Println("invaild input! please enter a number between 1-4.");
+			loop = true;
+		}else{
+			loop = false;
+		}
+	}
 	switch method {
 	case 1 :
 		stats, sorted = rollMethod1();
@@ -41,9 +49,9 @@ func main(){
 
 	// later stuff to write
 	fmt.Println("Choose your Class by typing it");
-	fmt.Scanf("%s\n", &myCharacter.Class);
+	fmt.Scanf("%s", &myCharacter.Class);
 	fmt.Println("Choose your Race by typing it");
-	fmt.Scanf("%s\n", &myCharacter.Race);
+	fmt.Scanf("%s", &myCharacter.Race);
 
 	fmt.Printf("Here's your character %#v\n", myCharacter);
 
@@ -139,7 +147,7 @@ func rollMethod4()( []int, bool){
 		i, rmx[i][0], rmx[i][1], rmx[i][2], rmx[i][3], rmx[i][4], rmx[i][5]);
 	}
 	var selection int;
-	fmt.Scanf("%d\n", &selection);
+	fmt.Scanf("%d", &selection);
 	return rmx[selection][:], true;
 }
 
