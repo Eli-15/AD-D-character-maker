@@ -82,13 +82,17 @@ func statpicker( stats []int) []int{
 		fmt.Printf("choose a stat for %s\n", abilities[i]);
 		for loop := true; loop == true;{
 			fmt.Printf("your stats %d\n", stats);
-			fmt.Scan(&index);
-			if used[index] == false{
-				used[index] = true;
-				sorted[i] = stats[index];
-				loop = false
-			}else{
+			_, err := fmt.Scanf("%d\n",&index);
+			if err == nil && index<7 && index>0{
+				if used[index] == false{
+					used[index] = true;
+					sorted[i] = stats[index];
+					loop = false
+				}else{
 				fmt.Println("You already used that one. Choose another.");
+				}
+			}else{
+				fmt.Println("Invalid input. Please enter a number between 1-6.");
 			}
 		}
 	}
