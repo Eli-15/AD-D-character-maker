@@ -11,10 +11,30 @@ var racemax = map[string][]int{
 	"Elf" : {18,19,18,18,18,18},
 	"Gnome" : {18,18,18,18,18,18},
 	"Half-Elf" : {18,18,18,18,18,18,},
-	"Halfling" : {17,19,18,18.17,18},
+	"Halfling" : {17,19,18,18,17,18},
 	"Half-Orc" : {19,17,19,17,14,12},
 	"Human" : {18,18,18,18,18,18},
 }
+
+var racemin = map[string][]int{
+	"Dwarf" : {8,3,12,3,3,3},
+	"Elf" : {3,7,6,8,3,8},
+	"Gnome" : {6,3,8,7,3,3},
+	"Half-Elf" : {3,6,6,4,3,3},
+	"Halfling" : {6,8,10,6,3,3},
+	"Half-Orc" : {6,3,13,3,3,3},
+	"Human" : {3,3,3,3,3,3},
+}
+
+/*var fmaxstr = map[string]int{
+	"Dwarf" : 17,
+	"Elf" : 16,
+	"Gnome" : 15,
+	"Half-Elf" : 17,
+	"Halfling" : 14,
+	"Half-Orc" : 18,
+	"Human" : 18,
+}*/
 
 //start of main !!!!!!!
 func main(){
@@ -59,6 +79,9 @@ func main(){
 	 myCharacter.Int  = stats[3];
 	 myCharacter.Wis  = stats[4];
 	 myCharacter.Char = stats[5];
+
+	validraces := checkrace(stats);
+	fmt.Printf("%#v\n", validraces);
 
 	// later stuff to write
 	fmt.Println("Choose your Class by typing it");
@@ -181,6 +204,22 @@ func sort(arr []int) {
 	}
 }
 
-func checkrace(stats []int)([]string){
+func checkrace(stats []int)(map[string]bool){
 	fmt.Println("checking valid races");
+	validrace := make(map[string]bool);
+
+	for key := range racemax{
+		legit := true;
+		for i:=0; i<6; i++{
+			if stats[i] > racemax[key][i] || stats[i] < racemin[key][i]{
+				legit = false;
+			}
+		}
+		if legit == true{
+			validrace[key] = true;
+		}
+	}
+
+	return validrace;
+
 }
