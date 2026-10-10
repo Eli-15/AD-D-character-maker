@@ -4,6 +4,19 @@ import (
 	"math/rand"
 )
 
+// Global variable section
+// Race max scoures
+var racemax = map[string][]int{
+	"Dwarf" : {18,17,19,18,18,16},
+	"Elf" : {18,19,18,18,18,18},
+	"Gnome" : {18,18,18,18,18,18},
+	"Half-Elf" : {18,18,18,18,18,18,},
+	"Halfling" : {17,19,18,18.17,18},
+	"Half-Orc" : {19,17,19,17,14,12},
+	"Human" : {18,18,18,18,18,18},
+}
+
+//start of main !!!!!!!
 func main(){
 	fmt.Println("Hello, choose a stat rolling method by typing 1-4 and then hit enter>");
 	var method int;
@@ -166,4 +179,8 @@ func sort(arr []int) {
 		}
 		i = i+1;
 	}
+}
+
+func checkrace(stats []int)([]string){
+	fmt.Println("checking valid races");
 }
