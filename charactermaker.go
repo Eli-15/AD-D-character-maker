@@ -4,8 +4,23 @@ import (
 	"math/rand"
 )
 
+type characterSheet struct{
+	// Ability Scores
+	Str int;
+	Dex int;
+	Con int;
+	Int int;
+	Wis int;
+	Char int;
+
+	// Race and Class
+	Class string;
+	Race string;
+	Sex string;
+
+}
+
 // Global variable section
-// Race max scoures
 var racemax = map[string][]int{
 	"Dwarf" : {18,17,19,18,18,16},
 	"Elf" : {18,19,18,18,18,18},
@@ -37,13 +52,13 @@ var fmaxstr = map[string]int{
 }
 
 var racemod = map[string][]int{
-	"Dwarf" : {0,0,1,0,0,-1},
-	"Elf" : {0,1,-1,0,0,0},
-	"Gnome" : {0,0,0,0,0,0},
-	"Half-Elf" : {0,0,0,0,0,0},
-	"Halfling" : {-1,1,0,0,0,0},
-	"Half-Orc" : {1,0,1,0,0,-2},
-	"Human" : {0,0,0,0,0,0},
+	"Dwarf"    : { 0, 0, 1, 0, 0,-1},
+	"Elf"      : { 0, 1,-1, 0, 0, 0},
+	"Gnome"    : { 0, 0, 0, 0, 0, 0},
+	"Half-Elf" : { 0, 0, 0, 0, 0, 0},
+	"Halfling" : {-1, 1, 0, 0, 0, 0},
+	"Half-Orc" : { 1, 0, 1, 0, 0,-2},
+	"Human"    : { 0, 0, 0, 0, 0, 0},
 }
 
 //start of main !!!!!!!
@@ -82,40 +97,13 @@ func main(){
 		 stats = statpicker(stats);
 	 }
 
-	 //writting stats to the myCharacter struc
-	 myCharacter.Str  = stats[0];
-	 myCharacter.Dex  = stats[1];
-	 myCharacter.Con  = stats[2];
-	 myCharacter.Int  = stats[3];
-	 myCharacter.Wis  = stats[4];
-	 myCharacter.Char = stats[5];
-
-	maleraces, femraces := checkrace(stats);
-	fmt.Printf("Valid male races:   %v\nValid female races: %v\n", maleraces, femraces);
+	myCharacter = raceselect(myCharacter,stats);
 
 	// later stuff to write
 	fmt.Println("Choose your Class by typing it");
 	fmt.Scanf("%s", &myCharacter.Class);
-	fmt.Println("Choose your Race by typing it");
-	fmt.Scanf("%s", &myCharacter.Race);
 
 	fmt.Printf("Here's your character %#v\n", myCharacter);
-
-}
-
-type characterSheet struct{
-	// Ability Scores
-	Str int;
-	Dex int;
-	Con int;
-	Int int;
-	Wis int;
-	Char int;
-
-	// Race and Class
-	Class string;
-	Race string;
-
 }
 
 //takes unsorted stats and has the player pick the order
@@ -234,4 +222,67 @@ func checkrace(stats []int)(map[string]bool, map[string]bool){
 	}
 
 	return maleraces, femraces;
+}
+
+// Race and Sex selector
+func raceselect(player characterSheet, stats []int) characterSheet{
+	maleraces, femraces := checkrace(stats);
+	fmt.Printf("Here are your valid race and sex combos.\n");
+	for key, value := range  maleraces{
+		if value == true{
+			fmt.Printf("Male %v,", key);
+		}
+	}
+	for key, value := range femraces{
+		if value == true{
+			fmt.Printf("Female %v,", key);
+		}
+	}
+	fmt.Printf("\nPease Choose either male or female by typing and entering it.\n");
+	var choice string;
+	for loop := true; loop == true;{
+		_, err := fmt.Scanf("%s\n", &choice);
+		if ((choice != "Male" && choice != "Female") || err != nil){
+			fmt.Println("Invalid input! Please enter either 'Male' or 'Female'.");
+		}else{
+			loop = false;
+		}
+	}
+	player.Sex = choice;
+	switch player.Sex{
+	case "Male":
+		fmt.Println("Choose one of the valid male race options");
+		var choice string;
+		fmt.Scanf("%s\n", &choice);
+		for loop := true; loop == true;{
+			if maleraces[choice] != true{
+				fmt.Printf("Invalid input! Please choose a valid option.\n");
+			}else{
+				player.Race = choice;
+				loop = false;
+			}
+		}
+		break
+	case "Female":
+		fmt.Println("Choose one of the valid female race options");
+		var choice string;
+		fmt.Scanf("%s\n", &choice);
+		for loop := true; loop == true;{
+			if femraces[choice] != true{
+				fmt.Printf("Invalid input! Please choose a valid option.\n");
+			}else{
+				player.Race = choice;
+				loop = false;
+			}
+		}
+		break
+	}
+	player.Str = stats[0] + racemod[player.Race][0];
+	player.Dex = stats[0] + racemod[player.Race][1];
+	player.Con = stats[0] + racemod[player.Race][2];
+	player.Int = stats[0] + racemod[player.Race][3];
+	player.Wis = stats[0] + racemod[player.Race][4];
+	player.Char = stats[0] + racemod[player.Race][5];
+
+	return player;
 }
