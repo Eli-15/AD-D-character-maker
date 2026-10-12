@@ -113,14 +113,14 @@ func statpicker( stats []int) []int{
 	abilities := [6]string{"Str", "Dex", "Con", "Int", "Wis", "Char"};
 	for i := 0; i < 6; i++{
 		var index int;
-		fmt.Printf("choose a stat for %s\n", abilities[i]);
+		fmt.Printf("Choose a roll for %s by typing it's location in the list of rolls.\n", abilities[i]);
 		for loop := true; loop == true;{
-			fmt.Printf("your stats %d\n", stats);
+			fmt.Printf("your rolls: %d\n", stats);
 			_, err := fmt.Scanf("%d\n",&index);
 			if err == nil && index<7 && index>0{
-				if used[index] == false{
-					used[index] = true;
-					sorted[i] = stats[index];
+				if used[index - 1] == false{
+					used[index - 1] = true;
+					sorted[i] = stats[index - 1];
 					loop = false
 				}else{
 				fmt.Println("You already used that one. Choose another.");
@@ -182,14 +182,14 @@ func rollMethod4()( []int, bool){
 	for i:=0;i<12;i++{
 		//the next line's arguments are spread over two lines
 		fmt.Printf("character %2d  Str %2d  Dex %2d  Con %2d  Int %2d  Wis %2d  Char %2d\n", 
-		i, rmx[i][0], rmx[i][1], rmx[i][2], rmx[i][3], rmx[i][4], rmx[i][5]);
+			i, rmx[i][0], rmx[i][1], rmx[i][2], rmx[i][3], rmx[i][4], rmx[i][5]);
 	}
 	var selection int;
 	fmt.Scanf("%d", &selection);
 	return rmx[selection][:], true;
 }
 
-//used by the rolling methods
+//used by the rolling methods 1 & 2
 func sort(arr []int) {
 	var i int = 1
 	for i < len(arr){
@@ -227,18 +227,22 @@ func checkrace(stats []int)(map[string]bool, map[string]bool){
 // Race and Sex selector
 func raceselect(player characterSheet, stats []int) characterSheet{
 	maleraces, femraces := checkrace(stats);
-	fmt.Printf("Here are your valid race and sex combos.\n");
+	//split print args
+	fmt.Printf("Your stats are: Str %v, Dex %v, Con %v, Int %v, Wis %v, Char %v.\n", 
+		stats[0], stats[1], stats[2], stats[3], stats[4], stats[5]);
+	fmt.Printf("Here are your valid race for male characters:");
 	for key, value := range  maleraces{
 		if value == true{
-			fmt.Printf("Male %v,", key);
+			fmt.Printf(" %v", key);
 		}
 	}
+	fmt.Printf("\nAnd valid races for female characters:");
 	for key, value := range femraces{
 		if value == true{
-			fmt.Printf("Female %v,", key);
+			fmt.Printf(" %v", key);
 		}
 	}
-	fmt.Printf("\nPease Choose either male or female by typing and entering it.\n");
+	fmt.Printf("\nPease Choose either 'Male' or 'Female' by typing and entering it.\n");
 	var choice string;
 	for loop := true; loop == true;{
 		_, err := fmt.Scanf("%s\n", &choice);
@@ -277,12 +281,12 @@ func raceselect(player characterSheet, stats []int) characterSheet{
 		}
 		break
 	}
-	player.Str = stats[0] + racemod[player.Race][0];
-	player.Dex = stats[0] + racemod[player.Race][1];
-	player.Con = stats[0] + racemod[player.Race][2];
-	player.Int = stats[0] + racemod[player.Race][3];
-	player.Wis = stats[0] + racemod[player.Race][4];
-	player.Char = stats[0] + racemod[player.Race][5];
+	player.Str  = stats[0] + racemod[player.Race][0];
+	player.Dex  = stats[1] + racemod[player.Race][1];
+	player.Con  = stats[2] + racemod[player.Race][2];
+	player.Int  = stats[3] + racemod[player.Race][3];
+	player.Wis  = stats[4] + racemod[player.Race][4];
+	player.Char = stats[5] + racemod[player.Race][5];
 
 	return player;
 }
