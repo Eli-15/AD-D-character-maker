@@ -2,6 +2,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"os"
 )
 
 type characterSheet struct{
@@ -68,13 +69,12 @@ func main(){
 	var myCharacter characterSheet;
 	var sorted bool;
 	var stats []int;
-	for loop := true; loop == true;{
+	for true{
 		_, err := fmt.Scanf("%d\n", &method);
 		if(err != nil || method <1 || method >4){
-			fmt.Println("invaild input! please enter a number between 1-4.");
-			loop = true;
+			fmt.Fprintf(os.Stderr,"invaild input! please enter a number between 1-4.\n");
 		}else{
-			loop = false;
+			break
 		}
 	}
 	switch method {
@@ -114,19 +114,19 @@ func statpicker( stats []int) []int{
 	for i := 0; i < 6; i++{
 		var index int;
 		fmt.Printf("Choose a roll for %s by typing it's location in the list of rolls.\n", abilities[i]);
-		for loop := true; loop == true;{
+		for true{
 			fmt.Printf("your rolls: %d\n", stats);
 			_, err := fmt.Scanf("%d\n",&index);
 			if err == nil && index<7 && index>0{
 				if used[index - 1] == false{
 					used[index - 1] = true;
 					sorted[i] = stats[index - 1];
-					loop = false
+					break
 				}else{
-				fmt.Println("You already used that one. Choose another.");
+				fmt.Fprintf(os.Stderr,"You already used that one. Choose another.\n");
 				}
 			}else{
-				fmt.Println("Invalid input. Please enter a number between 1-6.");
+				fmt.Fprintf(os.Stderr, "Invalid input. Please enter a number between 1-6.\n");
 			}
 		}
 	}
@@ -185,8 +185,15 @@ func rollMethod4()( []int, bool){
 			i, rmx[i][0], rmx[i][1], rmx[i][2], rmx[i][3], rmx[i][4], rmx[i][5]);
 	}
 	var selection int;
-	fmt.Scanf("%d", &selection);
-	return rmx[selection][:], true;
+	for 1 == 1{
+		_, err := fmt.Scanf("%d", &selection);
+		if err == nil && selection > 0 && selection < 13{
+			break
+		}else{
+			fmt.Fprintf(os.Stderr, "Invalid input! Please enter a number bwtween 1-12.\n");
+		}
+	}
+	return rmx[selection-1][:], true;
 }
 
 //used by the rolling methods 1 & 2
@@ -244,12 +251,12 @@ func raceselect(player characterSheet, stats []int) characterSheet{
 	}
 	fmt.Printf("\nPease Choose either 'Male' or 'Female' by typing and entering it.\n");
 	var choice string;
-	for loop := true; loop == true;{
+	for true{
 		_, err := fmt.Scanf("%s\n", &choice);
 		if ((choice != "Male" && choice != "Female") || err != nil){
-			fmt.Println("Invalid input! Please enter either 'Male' or 'Female'.");
+			fmt.Fprintf(os.Stderr, "Invalid input! Please enter either 'Male' or 'Female'.\n");
 		}else{
-			loop = false;
+			break
 		}
 	}
 	player.Sex = choice;
@@ -257,26 +264,26 @@ func raceselect(player characterSheet, stats []int) characterSheet{
 	case "Male":
 		fmt.Println("Choose one of the valid male race options");
 		var choice string;
-		fmt.Scanf("%s\n", &choice);
-		for loop := true; loop == true;{
+		for true {
+			fmt.Scanf("%s\n", &choice);
 			if maleraces[choice] != true{
-				fmt.Printf("Invalid input! Please choose a valid option.\n");
+				fmt.Fprintf(os.Stderr, "Invalid input! Please choose a valid option.\n");
 			}else{
 				player.Race = choice;
-				loop = false;
+				break
 			}
 		}
 		break
 	case "Female":
 		fmt.Println("Choose one of the valid female race options");
 		var choice string;
-		fmt.Scanf("%s\n", &choice);
-		for loop := true; loop == true;{
+		for true{
+			fmt.Scanf("%s\n", &choice);
 			if femraces[choice] != true{
-				fmt.Printf("Invalid input! Please choose a valid option.\n");
+				fmt.Fprintf(os.Stderr, "Invalid input! Please choose a valid option.\n");
 			}else{
 				player.Race = choice;
-				loop = false;
+				break
 			}
 		}
 		break
