@@ -99,6 +99,9 @@ func main(){
 
 	myCharacter = raceselect(myCharacter,stats);
 
+	classes := checkclass(myCharacter);
+	fmt.Println(classes);
+
 	// later stuff to write
 	fmt.Println("Choose your Class by typing it");
 	fmt.Scanf("%s", &myCharacter.Class);
@@ -296,4 +299,34 @@ func raceselect(player characterSheet, stats []int) characterSheet{
 	player.Char = stats[5] + racemod[player.Race][5];
 
 	return player;
+}
+
+func checkclass(player characterSheet)[]string{
+	var classes = [10]string{"Cleric","Druid","Fighter","Paladin","Ranger","Magic-User","Illusionist","Theif","Assassin","Monk"};
+	var classesPerRace = map[string][]bool{
+		"Dwarf"    :{false,false, true,false,false,false,false, true, true,false},
+		"Elf"      :{false,false, true,false,false, true,false, true, true,false},
+		"Gnome"    :{false,false, true,false,false,false, true, true, true,false},
+		"Half-Elf" :{ true, true, true,false, true, true,false, true, true,false},
+		"Halfling" :{false,false, true,false,false,false,false, true,false,false},
+		"Half-Orc" :{ true,false, true,false,false,false,false, true, true,false},
+		"Human"    :{ true, true, true, true, true, true, true, true, true, true},
+	}
+	minStr  := [10]int{ 0, 0, 9,12,13, 0, 0, 0,12,15};
+	minDex  := [10]int{ 0, 0, 0, 0, 0, 6,16, 9,12,15};
+	minCon  := [10]int{ 0, 0, 7, 9,14, 0, 0, 0, 0,11};
+	minInt  := [10]int{ 0, 0, 0, 9,13, 9,15, 0,11, 0};
+	minWis  := [10]int{ 9,12, 0,13,14, 0, 0, 0, 0,15};
+	minChar := [10]int{ 0,15, 0,17, 0, 0, 0, 0, 0, 0};
+	var validclasses [10]string;
+	var numvalidclasses int;
+	numvalidclasses =0;
+	for i := 0; i<10; i++{
+		if (classesPerRace[player.Race][i] == true && player.Str >= minStr[i] && player.Dex >= minDex[i] &&
+		player.Con >= minCon[i] && player.Int >= minInt[i] && player.Wis >= minWis[i] && player.Char >= minChar[i]){
+			validclasses[numvalidclasses] = classes[i];
+			numvalidclasses++
+		}
+	}
+	return validclasses[0:numvalidclasses];
 }
