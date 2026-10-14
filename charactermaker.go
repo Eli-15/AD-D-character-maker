@@ -22,36 +22,6 @@ type characterSheet struct{
 }
 
 // Global variable section
-var racemax = map[string][]int{
-	"Dwarf" : {18,17,19,18,18,16},
-	"Elf" : {18,19,18,18,18,18},
-	"Gnome" : {18,18,18,18,18,18},
-	"Half-Elf" : {18,18,18,18,18,18,},
-	"Halfling" : {17,19,18,18,17,18},
-	"Half-Orc" : {19,17,19,17,14,12},
-	"Human" : {18,18,18,18,18,18},
-}
-
-var racemin = map[string][]int{
-	"Dwarf" : {8,3,12,3,3,3},
-	"Elf" : {3,7,6,8,3,8},
-	"Gnome" : {6,3,8,7,3,3},
-	"Half-Elf" : {3,6,6,4,3,3},
-	"Halfling" : {6,8,10,6,3,3},
-	"Half-Orc" : {6,3,13,3,3,3},
-	"Human" : {3,3,3,3,3,3},
-}
-
-var fmaxstr = map[string]int{
-	"Dwarf" : 17,
-	"Elf" : 16,
-	"Gnome" : 15,
-	"Half-Elf" : 17,
-	"Halfling" : 14,
-	"Half-Orc" : 18,
-	"Human" : 18,
-}
-
 var racemod = map[string][]int{
 	"Dwarf"    : { 0, 0, 1, 0, 0,-1},
 	"Elf"      : { 0, 1,-1, 0, 0, 0},
@@ -185,7 +155,7 @@ func rollMethod4()( []int, bool){
 	for i:=0;i<12;i++{
 		//the next line's arguments are spread over two lines
 		fmt.Printf("character %2d  Str %2d  Dex %2d  Con %2d  Int %2d  Wis %2d  Char %2d\n", 
-			i, rmx[i][0], rmx[i][1], rmx[i][2], rmx[i][3], rmx[i][4], rmx[i][5]);
+			i+1, rmx[i][0], rmx[i][1], rmx[i][2], rmx[i][3], rmx[i][4], rmx[i][5]);
 	}
 	var selection int;
 	for 1 == 1{
@@ -213,6 +183,33 @@ func sort(arr []int) {
 }
 
 func checkrace(stats []int)(map[string]bool, map[string]bool){
+	var racemax = map[string][]int{
+		"Dwarf" : {18,17,19,18,18,16},
+		"Elf" : {18,19,18,18,18,18},
+		"Gnome" : {18,18,18,18,18,18},
+		"Half-Elf" : {18,18,18,18,18,18,},
+		"Halfling" : {17,19,18,18,17,18},
+		"Half-Orc" : {19,17,19,17,14,12},
+		"Human" : {18,18,18,18,18,18},
+	}
+	var racemin = map[string][]int{
+		"Dwarf" : {8,3,12,3,3,3},
+		"Elf" : {3,7,6,8,3,8},
+		"Gnome" : {6,3,8,7,3,3},
+		"Half-Elf" : {3,6,6,4,3,3},
+		"Halfling" : {6,8,10,6,3,3},
+		"Half-Orc" : {6,3,13,3,3,3},
+		"Human" : {3,3,3,3,3,3},
+	}
+	var fmaxstr = map[string]int{
+		"Dwarf" : 17,
+		"Elf" : 16,
+		"Gnome" : 15,
+		"Half-Elf" : 17,
+		"Halfling" : 14,
+		"Half-Orc" : 18,
+		"Human" : 18,
+	}
 	fmt.Println("checking valid races");
 	maleraces := make(map[string]bool);
 	femraces := make(map[string]bool);
