@@ -68,14 +68,9 @@ func main(){
 	 }
 
 	myCharacter = raceselect(myCharacter,stats);
-
-	classes := checkclass(myCharacter);
-	fmt.Println(classes);
+	myCharacter = pickClass(myCharacter);
 
 	// later stuff to write
-	fmt.Println("Choose your Class by typing it");
-	fmt.Scanf("%s", &myCharacter.Class);
-
 	fmt.Printf("Here's your character %#v\n", myCharacter);
 }
 
@@ -210,7 +205,6 @@ func checkrace(stats []int)(map[string]bool, map[string]bool){
 		"Half-Orc" : 18,
 		"Human" : 18,
 	}
-	fmt.Println("checking valid races");
 	maleraces := make(map[string]bool);
 	femraces := make(map[string]bool);
 	for key := range racemax{
@@ -240,13 +234,13 @@ func raceselect(player characterSheet, stats []int) characterSheet{
 	fmt.Printf("Here are your valid race for male characters:");
 	for key, value := range  maleraces{
 		if value == true{
-			fmt.Printf(" %v", key);
+			fmt.Printf(" %v;", key);
 		}
 	}
 	fmt.Printf("\nAnd valid races for female characters:");
 	for key, value := range femraces{
 		if value == true{
-			fmt.Printf(" %v", key);
+			fmt.Printf(" %v;", key);
 		}
 	}
 	fmt.Printf("\nPease Choose either 'Male' or 'Female' by typing and entering it.\n");
@@ -263,6 +257,13 @@ func raceselect(player characterSheet, stats []int) characterSheet{
 	switch player.Sex{
 	case "Male":
 		fmt.Println("Choose one of the valid male race options");
+		fmt.Printf("Here are your valid race for male characters:");
+		for key, value := range  maleraces{
+			if value == true{
+				fmt.Printf(" %v;", key);
+			}
+		}
+		fmt.Printf("\n");
 		var choice string;
 		for true {
 			fmt.Scanf("%s\n", &choice);
@@ -276,6 +277,13 @@ func raceselect(player characterSheet, stats []int) characterSheet{
 		break
 	case "Female":
 		fmt.Println("Choose one of the valid female race options");
+		fmt.Printf("Here are your valid race for female characters:");
+		for key, value := range  femraces{
+			if value == true{
+				fmt.Printf(" %v;", key);
+			}
+		}
+		fmt.Printf("\n");
 		var choice string;
 		for true{
 			fmt.Scanf("%s\n", &choice);
@@ -326,4 +334,34 @@ func checkclass(player characterSheet)[]string{
 		}
 	}
 	return validclasses[0:numvalidclasses];
+}
+
+func pickClass(player characterSheet) characterSheet{
+	validclasses := checkclass(player);
+	fmt.Printf("Choose a valid class by typing its name and pressing 'enter'.\nValid classes:");
+	for class := 0; class< len(validclasses); class++{
+		fmt.Printf(" %v;", validclasses[class]);
+	}
+	fmt.Printf("\n");
+	var choice string;
+	for true{
+		_, err := fmt.Scanf("%s\n", &choice);
+		if err != nil{
+			fmt.Fprintf(os.Stderr, "Invalid input! Please type a class name");
+		}else{
+			match := false
+			for _, class := range validclasses {
+				if choice == class{
+					match = true 
+				}
+			}
+			if match == true{
+				break;
+			}else{
+				fmt.Fprintf(os.Stderr, "Invalid input! Please type a class name");
+			}
+		}
+	}
+	player.Class = choice;
+	return player;
 }
