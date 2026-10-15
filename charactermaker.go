@@ -78,23 +78,35 @@ func main(){
 func statpicker( stats []int) []int{
 	var sorted [6]int
 	used := [6]bool{false,false,false,false,false,false}
-	abilities := [6]string{"Str", "Dex", "Con", "Int", "Wis", "Char"};
-	for i := 0; i < 6; i++{
-		var index int;
-		fmt.Printf("Choose a roll for %s by typing it's location in the list of rolls.\n", abilities[i]);
-		for true{
-			fmt.Printf("your rolls: %d\n", stats);
-			_, err := fmt.Scanf("%d\n",&index);
-			if err == nil && index<7 && index>0{
-				if used[index - 1] == false{
-					used[index - 1] = true;
-					sorted[i] = stats[index - 1];
-					break
-				}else{
-				fmt.Fprintf(os.Stderr,"You already used that one. Choose another.\n");
-				}
+	abilities := [6]string{"Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"};
+	for abl := 0; abl < 6; abl++{
+		fmt.Printf("Choose a roll for %v by typing it.\nAvalible rolls:", abilities[abl])
+		for i, roll := range stats{
+			if used[i] == false{
+				fmt.Printf(" %v,", roll);
+			}
+		}
+		fmt.Printf("\n");
+		var choice int;
+		for loop := true; loop == true;{
+			_, err := fmt.Scanf("%d\n", &choice);
+			if err != nil {
+				fmt.Println("Invalid input! Please choose one of the avalible rolls.");
 			}else{
-				fmt.Fprintf(os.Stderr, "Invalid input. Please enter a number between 1-6.\n");
+				 matched := false;
+				 for index, roll := range stats{
+					if choice == roll && used[index] == false{
+						sorted[index] = roll;
+						used[index] = true;
+						matched = true;
+						break;
+					}
+				}
+				if matched == true{
+					break;
+				}else{
+					fmt.Println("Invalid input! Please used a avalible roll.");
+				}
 			}
 		}
 	}
