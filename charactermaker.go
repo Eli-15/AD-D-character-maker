@@ -14,6 +14,8 @@ type characterSheet struct{
 	Wis int;
 	Char int;
 
+	HP int;
+
 	// Race and Class
 	Class string;
 	Race string;
@@ -69,6 +71,7 @@ func main(){
 
 	myCharacter = raceselect(myCharacter,stats);
 	myCharacter = pickClass(myCharacter);
+	myCharacter = genHP(myCharacter);
 
 	// later stuff to write
 	fmt.Printf("Here's your character %#v\n", myCharacter);
@@ -177,14 +180,11 @@ func rollMethod4()( []int, bool){
 
 //used by the rolling methods 1 & 2
 func sort(arr []int) {
-	var i int = 1
-	for i < len(arr){
-		var j int = i
-		for j > 0 && arr[j-1] > arr[j]{
-			arr[j], arr[j-1] = arr[j-1], arr[j]
-			j = j-1
+	for i := 1;  i < len(arr); i++{
+		for j:= i; j > 0 && arr[j-1] > arr[j]; j = j-1{
+			//swap
+			arr[j], arr[j-1] = arr[j-1], arr[j];
 		}
-		i = i+1;
 	}
 }
 
@@ -318,7 +318,7 @@ func raceselect(player characterSheet, stats []int) characterSheet{
 }
 
 func checkclass(player characterSheet)[]string{
-	var classes = [10]string{"Cleric","Druid","Fighter","Paladin","Ranger","Magic-User","Illusionist","Theif","Assassin","Monk"};
+	var classes = [10]string{"Cleric","Druid","Fighter","Paladin","Ranger","Magic-User","Illusionist","Thief","Assassin","Monk"};
 	var classesPerRace = map[string][]bool{
 		"Dwarf"    :{false,false, true,false,false,false,false, true, true,false},
 		"Elf"      :{false,false, true,false,false, true,false, true, true,false},
@@ -374,5 +374,42 @@ func pickClass(player characterSheet) characterSheet{
 		}
 	}
 	player.Class = choice;
+	return player;
+}
+
+func genHP(player characterSheet) characterSheet{
+	var ConBonus int;
+	var hitdie = map[string]int{
+		"Cleric"      : 8,
+		"Druid"       : 8,
+		"Fighter"     : 10,
+		"Paladin"     : 10,
+		"Ranger"      : 8,
+		"Magic-User"  : 4,
+		"Illusionist" : 4,
+		"Thief"       : 6,
+		"Assasin"     : 6,
+		"Monk"        : 4,
+	}
+	var ConHpAdd        = [21]int{-2,-2,-2,-2,-1,-1,-1,0,0,0,0,0,0,0,0,1,2,2,2,2,2}
+	var fighterConHpAdd = [21]int{-2,-2,-2,-2,-1,-1,-1,0,0,0,0,0,0,0,0,1,2,3,4,5,5}
+	if player.Class == "Fighter"{
+		ConBonus = fighterConHpAdd[player.Con];
+	}else{
+		ConBonus = ConHpAdd[player.Con];
+	}
+	switch{
+	case player.Con < 19:
+		player.HP = rand.Intn(hitdie[player.Class]) + 1 +ConBonus;
+		break;
+	case player.Con > 18:
+		var roll int;
+		roll = rand.Intn(hitdie[player.Class]) + 1;
+		if roll == 1{
+			roll = 2;
+		}
+		player.HP = roll + ConBonus;
+		break;
+	}
 	return player;
 }
