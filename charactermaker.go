@@ -21,6 +21,13 @@ type characterSheet struct{
 	Race string;
 	Sex string;
 
+	//saves
+	Poi int;
+	Pet int;
+	Rod int;
+	BW int;
+	Spell int;
+
 }
 
 // Global variable section
@@ -72,6 +79,7 @@ func main(){
 	myCharacter = raceselect(myCharacter,stats);
 	myCharacter = pickClass(myCharacter);
 	myCharacter = genHP(myCharacter);
+	myCharacter = genSaves(myCharacter);
 
 	// later stuff to write
 	fmt.Printf("Here's your character %#v\n", myCharacter);
@@ -413,3 +421,27 @@ func genHP(player characterSheet) characterSheet{
 	}
 	return player;
 }
+
+func genSaves(player characterSheet) characterSheet{
+	var saves = map[string][5]int{
+		"Cleric"      : {10,13,14,16,15},
+		"Druid"       : {10,13,14,16,15},
+		"Fighter"     : {16,17,18,20,19},
+		"Paladin"     : {16,17,18,20,19},
+		"Ranger"      : {16,17,18,20,19},
+		"Magic-User"  : {14,13,11,15,12},
+		"Illusionist" : {14,13,11,15,12},
+		"Thief"       : {13,12,14,16,15},
+		"Assasin"     : {13,12,14,16,15},
+		"Monk"        : {13,12,14,16,15},
+	}
+	savesforclass := saves[player.Class];
+	player.Poi   = savesforclass[0];
+	player.Pet   = savesforclass[1];
+	player.Rod   = savesforclass[2];
+	player.BW    = savesforclass[3];
+	player.Spell = savesforclass[4];
+	
+	return player;
+}
+
